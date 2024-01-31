@@ -25,7 +25,7 @@ nav {
   border: 1px solid #dfe1e5;
 }
 
-.nav--buttons > button {
+.nav--button {
   line-height: 20px;
   width: 88px;
   padding: 12px 16px;
@@ -38,7 +38,7 @@ nav {
   margin-right: 4px;;
 }
 
-.nav--buttons > button:hover {
+.nav--button:hover {
   background-color: #dfe1e5;
 }
 

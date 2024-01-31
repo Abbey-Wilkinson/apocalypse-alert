@@ -1,13 +1,25 @@
+import {Link} from "react-router-dom"
+import React from "react"
 import logo from '../images/logo.png';
 
 export default function Navbar() {
+
     return (
         <nav>
             <img src={logo} className="nav--logo"/>
-            <input list="countries" className="nav--search" placeholder="Search Country"></input>
-            <div className="nav--buttons">
-                <button>Sign In</button>
-                <button>Log In</button>
+            <div>
+                <input list="countries" className="nav--search" placeholder="Search Country"></input>
+                <Link to="/country">
+                    <button>Search</button>
+                </Link>
+            </div>
+            <div>
+                <Link to="/account">
+                    <button className="nav--button">Sign In</button>
+                </Link>
+                <Link to="/account">
+                    <button className="nav--button">Log In</button>
+                </Link>
             </div>
         </nav>
     )

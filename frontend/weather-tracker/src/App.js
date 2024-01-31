@@ -1,21 +1,18 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import Filters from './components/Filters';
-import HeatMap from './components/HeatMap';
-import Weather from './components/Weather';
+import {HashRouter as Router, Routes, Route} from 'react-router-dom'
+import Home from "./pages/Home"
+import Account from './pages/Account';
+import Country from './pages/Country';
 
 function App() {
   return (
-    <div className="fullscreen">
-      <Navbar />
-      <main>
-        <Filters />
-        <div className="heatmap-and-weather">
-          <HeatMap />
-          <Weather />
-        </div>
-      </main>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />}/>
+        <Route path="/account" element={<Account />}/>
+        <Route path="/country" element={<Country />}/>
+      </Routes>
+    </Router>
   );
 }
 
