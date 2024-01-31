@@ -10,8 +10,10 @@ function App() {
       <Navbar />
       <main>
         <Filters />
-        <HeatMap />
-        <Weather />
+        <div className="heatmap-and-weather">
+          <HeatMap />
+          <Weather />
+        </div>
       </main>
     </div>
   );

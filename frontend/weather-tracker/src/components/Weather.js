@@ -7,6 +7,8 @@ export default function Weather() {
             <WeatherTile />
             <WeatherTile />
             <WeatherTile />
+            <WeatherTile />
+            <WeatherTile />
         </div>
     )
 }

@@ -12,7 +12,7 @@ nav {
 }
 
 .nav--logo {
-  width: 30px;
+  width: 50px;
   margin-right: 7px;
 }
 
@@ -53,16 +53,29 @@ main {
   padding-top: 0px;
 }
 
+.heatmap-and-weather {
+  display: flex;
+  flex-direction: column;
+}
+
+.heatmap {
+  display: block;
+  margin: 10px auto;
+}
+
 .heatmap > img {
-  width: 500px;
+  width: 590px;
+  border-radius: 10px;
 }
 
 .weather {
   /* border: 1px solid black; */
+  box-shadow: rgb(226, 226, 226) 0px 2px 0px 0px inset;
   display: flex;
   gap: 40px;
-  width: 100%;
+  width: 1250px;;
   padding: 10px;
+  overflow-x: scroll;
 }
 
 .weather-tile {
