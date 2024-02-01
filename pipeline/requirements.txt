@@ -3,3 +3,4 @@ pytest
 pandas
 python-dotenv
 requests
+polars
