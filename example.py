@@ -31,6 +31,11 @@ def air_reading_time():
                    labels={'AQI': 'Air Quality Index (AQI)', 'Timestamp': 'Timestamp'})
     return fig
 
+def pollutant_count_by_country():
+    fig = px.pie(pollutant_counts, names=pollutant_counts.index, values=pollutant_counts.values,
+                title=f'Pollutant distribution in {selected_country}', color_discrete_sequence=['#0000FF', '#0072BD', '#4DBEEE'])
+    return fig
+
 if __name__ == "__main__":
     #------------------ SIMULATED DATA-----------------------
     data = {'lat': [37.7749, 40.7128, 34.0522],
@@ -72,14 +77,20 @@ if __name__ == "__main__":
 
     filtered_df = df[df['Pollutant'] == selected_pollutant]
 
-    pollutants_map = create_pollutants_map()
-    air_qual_map = air_reading_time()
+
 
     
-    st.plotly_chart(pollutants_map)
-    st.title('Earthquake Magnitude.')
+    st.plotly_chart(create_pollutants_map())
+    st.subheader('Earthquake Distribution and Magnitude', divider='rainbow')
     st.plotly_chart(eq_map)
-    st.title('Air reading by time.')
-    st.plotly_chart(air_qual_map)
+    st.subheader('Air quality vs. Time.', divider='rainbow')
+    st.plotly_chart(air_reading_time())
+
+    st.subheader('Pollutants by Country.', divider='rainbow')
+    selected_country = st.selectbox("Select a country:", countries, index=1)
+    filtered_df = df[df['Country'] == selected_country]
+    pollutant_counts = filtered_df['Pollutant'].value_counts()
+    st.plotly_chart(pollutant_count_by_country())
+
     
     
