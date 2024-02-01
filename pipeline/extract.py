@@ -9,8 +9,8 @@ from requests import Session
 
 session = Session()
 
-
 # World Cities
+
 
 def get_capital_cities():
     """
@@ -95,7 +95,7 @@ def get_air_reading_data_for_all(capital_cities: pl.Series):
 
 def get_earthquake_api_request_response(lat: str, lng: str) -> dict:
     """
-    Retrieve the response json data for an API request to the uv api.
+    Retrieve the response json data for an API request to the earthquake api.
     """
 
     response = session.get(
@@ -119,7 +119,7 @@ def get_earthquake_api_request_response(lat: str, lng: str) -> dict:
 
 def get_earthquake_data_for_all(cities: list[dict]) -> list[dict]:
     """
-    Retrieves uv data for all capital cities.
+    Retrieves earthquake data for all capital cities.
     """
 
     with ThreadPoolExecutor() as executor:
