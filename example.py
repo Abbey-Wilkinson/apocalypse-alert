@@ -5,6 +5,7 @@ import streamlit as st
 import numpy as np
 import random
 from datetime import datetime, timedelta, timezone
+from earthquakes import get_eq_data_for_country, get_eq_json
 
 def create_pollutants_map():
     '''Creates a map which shows pollutant level by country.'''
@@ -18,12 +19,11 @@ def create_pollutants_map():
 
     return fig
 
-def create_overall_eq_map():
+def create_overall_eq_map(df):
     '''Creates a map which shows all points where earthquakes have occured with magnitude.'''
-    df = pd.DataFrame(data)
-    fig = px.density_mapbox(df, lat='lat', lon='lon', z='Magnitude', radius=10,
+    fig = px.density_mapbox(df, lat='lat', lon='lng', z='mag', radius=10,
                             center=dict(lat=0, lon=180), zoom=0,
-                            mapbox_style="open-street-map")
+                            mapbox_style="carto-positron")
     return fig
 
 def air_reading_time():
@@ -36,16 +36,18 @@ def pollutant_count_by_country():
                 title=f'Pollutant distribution in {selected_country}', color_discrete_sequence=['#0000FF', '#0072BD', '#4DBEEE'])
     return fig
 
-if __name__ == "__main__":
-    #------------------ SIMULATED DATA-----------------------
-    data = {'lat': [37.7749, 40.7128, 34.0522],
-        'lon': [-122.4194, -74.0060, -118.2437],
-        'Magnitude': [1, 2, 3]}
 
-    df = pd.DataFrame(data)
+
+if __name__ == "__main__":
+    #------------------ API EQ DATA-----------------------
+
+    #MAKES API REQUEST FOR JAPAN 
+    country_searched = "Japan"
+    json_data = get_eq_json(country_searched)
+    df = get_eq_data_for_country(country_searched, json_data)
     
-    #------------------ END SIMULATED DATA-----------------------
-    eq_map = create_overall_eq_map()
+    #------------------ END EQ DATA-----------------------
+    eq_map = create_overall_eq_map(df)
 
     #------------------ SIMULATED DATA-----------------------
     np.random.seed(42)
