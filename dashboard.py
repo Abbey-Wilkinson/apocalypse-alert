@@ -3,8 +3,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 import numpy as np
-import random
-from datetime import datetime, timedelta, timezone
 from earthquakes import get_eq_data_for_country, get_eq_json
 
 def create_pollutants_map():
@@ -21,9 +19,11 @@ def create_pollutants_map():
 
 def create_overall_eq_map(df):
     '''Creates a map which shows all points where earthquakes have occured with magnitude.'''
+    dark_color_scale = px.colors.sequential.YlOrRd
+    midpoint_value = df['mag'].max()
     fig = px.density_mapbox(df, lat='lat', lon='lng', z='mag', radius=10,
                             center=dict(lat=0, lon=180), zoom=0,
-                            mapbox_style="carto-positron")
+                            mapbox_style="carto-positron", hover_name=df['title'], color_continuous_scale=dark_color_scale, color_continuous_midpoint=midpoint_value)
     return fig
 
 def air_reading_time():
@@ -79,9 +79,6 @@ if __name__ == "__main__":
 
     filtered_df = df[df['Pollutant'] == selected_pollutant]
 
-
-
-    
     st.plotly_chart(create_pollutants_map())
     st.subheader('Earthquake Distribution and Magnitude', divider='rainbow')
     st.plotly_chart(eq_map)
@@ -93,6 +90,3 @@ if __name__ == "__main__":
     filtered_df = df[df['Country'] == selected_country]
     pollutant_counts = filtered_df['Pollutant'].value_counts()
     st.plotly_chart(pollutant_count_by_country())
-
-    
-    
