@@ -34,17 +34,31 @@ def get_capital_cities_pl():
     cities = pl.read_csv("worldcities.csv", columns=[
                          'city', 'country', 'capital'])
     capital_cities = cities.filter(pl.col("capital") == "primary")['city']
+
     return capital_cities
+
+
+def get_capital_lat_lng_pl() -> list[tuple]:
+    """
+    Loads the capital city of each country.
+    """
+    coordinates = []
+    cities = pl.read_csv("worldcities.csv", columns=[
+                         'city', 'country', 'capital', 'lat', 'lng'])
+    capital_cities = cities.filter(pl.col("capital") == "primary")
+
+    return capital_cities.select('lat', 'lng').rows()
 
 
 # Air Pollution API
 
-def get_pollution_api_request_response(city: str, key: str) -> dict:
+def get_pollution_api_request_response(coordinates: pl.DataFrame, key: str) -> dict:
     """
     Retrieve the response json data for an API request to the pollution api.
     """
 
-    response = session.get(f'https://api.waqi.info/feed/{city}/?token={key}')
+    response = session.get(
+        f'https://api.waqi.info/feed/geo:{coordinates[0]};{coordinates[1]}/?token={key}')
     json_data = response.json()
     return json_data
 
@@ -70,7 +84,7 @@ def get_pollution_info(pollution_data: dict) -> dict:
     return "No data found."
 
 
-def get_air_reading_data_for_all(capital_cities: pl.Series):
+def get_air_reading_data_for_all(capital_cities: pl.DataFrame):
     """
     Retrieves all of the information on a capital city,
     if the endpoint is valid then the desired information is extracted.
@@ -78,8 +92,8 @@ def get_air_reading_data_for_all(capital_cities: pl.Series):
     with ThreadPoolExecutor() as executor:
 
         futures = [executor.submit(get_pollution_api_request_response,
-                                   city, environ["POLLUTION_API_KEY"]) for city in capital_cities]
-
+                                   row, environ["POLLUTION_API_KEY"]) for row in capital_cities]
+        print(capital_cities)
         wanted_city_data = []
         for future in as_completed(futures):
             all_city_data = future.result()
@@ -142,7 +156,8 @@ if __name__ == "__main__":
     load_dotenv()
     start = perf_counter()
 
-    capital_cities = get_capital_cities_pl()
+    capital_cities = get_capital_lat_lng_pl()
+
     wanted_city_data = get_air_reading_data_for_all(capital_cities)
     all_earthquake_index_data = get_earthquake_data_for_all(
         wanted_city_data)
